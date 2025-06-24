@@ -8,4 +8,5 @@ public class Ticket {
     private String source;
     private String destination;
     private Date dateofTravel;
+    private Train train;
 }
