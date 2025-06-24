@@ -4,10 +4,23 @@
 package org.example;
 
 import java.util.List;
+import java.util.Scanner;
+
+import org.example.services.UserBookingService;
 
 public class App {
 
     public static void main(String[] args) {
-        
+        System.out.println("Train booking system");
+        Scanner scanner=new Scanner(System.in);
+
+        int option=0;
+        UserBookingService userbooking;
+        try{
+            userbooking=new userbooking();
+            
+        }catch(e){
+
+        }
     }
 }
