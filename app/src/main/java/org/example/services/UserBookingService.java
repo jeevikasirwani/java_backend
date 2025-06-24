@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.example.entities.User;
+import org.example.utils.UserServiceutil;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,8 +26,8 @@ public class UserBookingService {
     }
 
     public Boolean loginUser(){
-        Optional<User> founduser=userlist.stream().filter(user->{
-            return user.getName().equals(user.getName()) &&  UserServiceUtil.checkPassword(user.getPassword(), user1.getHashedPassword())
+        Optional<User> founduser=userList.stream().filter(user->{
+            return user.getName().equals(user.getName()) &&  UserServiceutil.checkPassword(user.getPassword(), user.getHashpass());
         }).findFirst();
         return founduser.isPresent();
     } 
@@ -38,6 +39,42 @@ public class UserBookingService {
             return Boolean.TRUE;
         }catch (IOException ex){
             return Boolean.FALSE;
+        }
+    }
+
+    private void saveUserListToFile() throws IOException{
+        File files=new File(USERS_PATH);
+        objectMapper.writeValue(files, userList);
+    }
+
+
+    public void fetchBookings(){
+        System.out.println("Fetching booking...");
+        user.printTickets();
+    }
+
+    public Optional<User> getUserbyName(String name){
+        return userList.stream().filter(user->user.getName().equals(name)).findFirst();
+    }
+
+     public void setUser(User user){
+        this.user = user;
+    }
+
+
+    public boolean cancelBooking(String ticketId) throws IOException{
+        if(ticketId==null || ticketId.isEmpty()){
+            System.out.println("Ticket not booked");
+            return Boolean.FALSE;
+        }
+        boolean isremoved=user.getTicketsBooked().removeIf(ticket->ticket.getTicketId().equals(ticketId));
+        if(isremoved){
+            saveUserListToFile();
+            System.out.println("Ticket Id "+ticketId+" canceled");
+            return true;
+        }else{
+            System.out.println("No ticket found with ID " + ticketId);
+            return false;
         }
     }
 }

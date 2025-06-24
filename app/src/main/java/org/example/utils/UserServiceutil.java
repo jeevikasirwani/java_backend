@@ -1,5 +1,7 @@
 package org.example.utils;
 
+import java.io.IOException;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 public class UserServiceutil {
@@ -13,4 +15,7 @@ public class UserServiceutil {
     public static boolean checkPassword(String plainPass,String hashPass){
         return BCrypt.checkpw(plainPass, hashPass);
     }
+
+
+    
 }
