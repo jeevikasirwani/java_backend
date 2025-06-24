@@ -25,54 +25,52 @@ public class UserBookingService {
         });
     }
 
-    public Boolean loginUser(){
-        Optional<User> founduser=userList.stream().filter(user->{
-            return user.getName().equals(user.getName()) &&  UserServiceutil.checkPassword(user.getPassword(), user.getHashpass());
+    public Boolean loginUser() {
+        Optional<User> founduser = userList.stream().filter(user -> {
+            return user.getName().equals(user.getName()) && UserServiceutil.checkPassword(user.getPassword(), user.getHashpass());
         }).findFirst();
         return founduser.isPresent();
-    } 
+    }
 
-     public Boolean signUp(User user1){
-        try{
+    public Boolean signUp(User user1) {
+        try {
             userList.add(user1);
             saveUserListToFile();
             return Boolean.TRUE;
-        }catch (IOException ex){
+        } catch (IOException ex) {
             return Boolean.FALSE;
         }
     }
 
-    private void saveUserListToFile() throws IOException{
-        File files=new File(USERS_PATH);
+    private void saveUserListToFile() throws IOException {
+        File files = new File(USERS_PATH);
         objectMapper.writeValue(files, userList);
     }
 
-
-    public void fetchBookings(){
+    public void fetchBookings() {
         System.out.println("Fetching booking...");
         user.printTickets();
     }
 
-    public Optional<User> getUserbyName(String name){
-        return userList.stream().filter(user->user.getName().equals(name)).findFirst();
+    public Optional<User> getUserbyName(String name) {
+        return userList.stream().filter(user -> user.getName().equals(name)).findFirst();
     }
 
-     public void setUser(User user){
+    public void setUser(User user) {
         this.user = user;
     }
 
-
-    public boolean cancelBooking(String ticketId) throws IOException{
-        if(ticketId==null || ticketId.isEmpty()){
+    public boolean cancelBooking(String ticketId) throws IOException {
+        if (ticketId == null || ticketId.isEmpty()) {
             System.out.println("Ticket not booked");
             return Boolean.FALSE;
         }
-        boolean isremoved=user.getTicketsBooked().removeIf(ticket->ticket.getTicketId().equals(ticketId));
-        if(isremoved){
+        boolean isremoved = user.getTicketsBooked().removeIf(ticket -> ticket.getTicketId().equals(ticketId));
+        if (isremoved) {
             saveUserListToFile();
-            System.out.println("Ticket Id "+ticketId+" canceled");
+            System.out.println("Ticket Id " + ticketId + " canceled");
             return true;
-        }else{
+        } else {
             System.out.println("No ticket found with ID " + ticketId);
             return false;
         }
